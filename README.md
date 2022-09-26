@@ -12,7 +12,7 @@ SqlModel 의 Hero 튜토리얼을 FastAPI 프레임워크로 구현한 프로젝
 
 #### Backend: api
 
-| ![fastapi /docs screen](/assets/img/12-fastapi-sqlmodel-pg14-docs-crunch/png){: width="580"} |
+| ![fastapi /docs screen](../../blob/main/assets/img/12-fastapi-sqlmodel-pg14-docs-crunch/png){: width="580"} |
 | :----: |
 | &lt;그림&gt; FastAPI `/docs` 화면 |
 
