@@ -9,7 +9,7 @@ FastAPI 프레임워크로 DB 에 연결해 API 제공하는 백엔드 프로젝
 - [SqlModel 공식문서 - FastAPI and Pydantic](https://sqlmodel.tiangolo.com/tutorial/fastapi/)
 - [FastAPI 공식문서 - SQL (Relational) Databases](https://fastapi.tiangolo.com/tutorial/sql-databases/)
 
-| ![fastapi /docs screen](../../blob/main/assets/img/12-fastapi-sqlmodel-pg14-docs-crunch/png){: width="580"} |
+| <img alt="fastapi docs screen" src="https://github.com/maxmin93/fastapi-sqlmodel-heroes/blob/main/assets/img/12-fastapi-sqlmodel-pg14-docs-crunch.png?raw=true" style="width:580px;"/> |
 | :----: |
 | &lt;그림&gt; FastAPI `/docs` 화면 |
 
