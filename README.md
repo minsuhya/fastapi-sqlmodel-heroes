@@ -12,7 +12,7 @@ SqlModel 의 Hero 튜토리얼을 FastAPI 프레임워크로 구현한 프로젝
 
 #### Backend: api
 
-| ![](){: width="580"} |
+| ![fastapi /docs screen](/assets/img/12-fastapi-sqlmodel-pg14-docs-crunch/png){: width="580"} |
 | :----: |
 | &lt;그림&gt; FastAPI `/docs` 화면 |
 
@@ -36,7 +36,7 @@ company_db=# select * from hero;
 
 #### Frontend: web
 
-| ![](){: width="580"} |
+| ![Vue heroes screen](/assets/img/12-fastapi-sqlmodel-pg14-docs-crunch/png){: width="580"} |
 | :----: |
 | &lt;그림&gt; Vue `/heroes` 화면 |
 
@@ -85,7 +85,8 @@ company_db=# select * from hero;
 ### 3) docker compose 실행
 
 ```bash
-$ docker compose build
+# 도커 컴포즈에서 linux/amd64 이미지 생성
+$ env DOCKER_DEFAULT_PLATFORM=linux/amd64 docker compose build
 
 
 $ docker compose run --rm db
@@ -105,7 +106,7 @@ git init
 git add --all
 git commit -m "first commit"
 git branch -M main
-git remote add origin https://github.com/maxmin93/fastapi-sqlmodel-heroes.git
+git remote add origin $GITHUB/maxmin93/fastapi-sqlmodel-heroes.git
 git push -u origin main
 
 # 기존 리포지토리에 연결시
