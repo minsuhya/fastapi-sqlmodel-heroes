@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:14
+    container_name: smp-db
+    env_file:
+      - db.env
+    ports:
+      - "5432:5432/tcp"
+    volumes:
+      - smpdb_data:/var/lib/postgresql/data
+
+  api:
+    image: py39-slim
+    container_name: smp-api
+    build: ./smp-api
+    command: poetry run python app/main.py
+    env_file:
+      - api.env
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - 58000:8000
+    volumes:
+      - smpapi_data:/app
+
+
+volumes:
+  smpdb_data:
+    name: smpdb_data
+  smpapi_data:
+    name: smpapi_data

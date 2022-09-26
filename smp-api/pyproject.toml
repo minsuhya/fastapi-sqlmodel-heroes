@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "smp-api"
+version = "0.1.0"
+description = ""
+authors = ["Min Byeong-Guk <maxmin93@gmail.com>"]
+readme = "README.md"
+packages = [{include = "smp_api"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+sqlmodel = "^0.0.8"
+fastapi = {extras = ["full"], version = "^0.85.0"}
+uvicorn = "^0.18.3"
+python-dotenv = "^0.21.0"
+psycopg2-binary = "^2.9.3"
+loguru = "^0.6.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
