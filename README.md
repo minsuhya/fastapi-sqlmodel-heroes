@@ -43,6 +43,56 @@ company_db=# select * from hero;
 
 ### 2) API 샘플
 
+#### POST `/heroes`
+
+```bash
+# insert with HeroCreate
+$ curl -X POST "http://localhost:58000/heroes/" -H "Content-Type: application/json" -d '''
+{"name": "ABC Teacher", "secret_name": "foo bar", "age": 35}
+'''
+{"name":"ABC Teacher","secret_name":"foo bar","age":35,"id":5}%
+
+
+# select by ID=5
+$ curl -X GET "http://localhost:58000/hero/5"
+{"name":"ABC Teacher","secret_name":"foo bar","age":35,"id":5}%
+```
+
+#### PATCH `/heroes/{id}`
+
+```bash
+# update whole-data by ID=5
+$ curl -X PATCH "http://localhost:58000/heroes/5" -H "Content-Type: application/json" -H 'Accept: application/json' -d '''
+{"name": "ABC Teacher (Extra)", "secret_name": "foo bar", "age": 55}
+'''
+{"name":"ABC Teacher","secret_name":"foo bar","age":35,"id":5}%
+
+
+# update partial-data by ID=5
+$ curl -X PATCH "http://localhost:58000/heroes/5" -H "Content-Type: application/json" -H 'Accept: application/json' -d '''
+{"name": "ABC Super Teacher (Extra)"}
+'''
+{"name":"ABC Super Teacher (Extra)","secret_name":"foo bar","age":55,"id":5}%
+
+
+# select by ID=5
+$ curl -X GET -H 'Accept: application/json' "http://localhost:58000/hero/5"
+{"name":"ABC Teacher Teacher (Extra)","secret_name":"foo bar","age":55,"id":5}%
+```
+
+#### DELETE `/heroes/{id}`
+
+```bash
+# delete by ID=5
+$ curl -X DELETE -H 'Accept: application/json' "http://localhost:58000/heroes/5"
+{"ok":true}%
+
+
+# select by ID=5 => 404 Error
+$ curl -X GET -H 'Accept: application/json' "http://localhost:58000/hero/5"
+{"detail":"Hero not found"}%
+```
+
 #### GET `/heroes`
 
 ```json

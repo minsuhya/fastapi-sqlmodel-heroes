@@ -60,6 +60,8 @@ def delete_hero(hero_id: int, *, session: Session = Depends(get_session)):
 @app.get("/hero/{id}", response_model=HeroRead)
 def get_hero(id: int, *, session: Session = Depends(get_session)):
     hero = session.exec(select(Hero).where(Hero.id == id)).first()
+    if not hero:
+        raise HTTPException(status_code=404, detail="Hero not found")
     return hero
 
 

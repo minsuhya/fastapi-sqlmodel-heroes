@@ -54,7 +54,7 @@ failed to solve: executor failed running [/bin/sh -c poetry install && poetry ru
   + aarch64 아키텍처에서 libpq 바이너리가 잘못 로딩되는 문제가 있다고
   + 그래서, `linux/amd64` 아키텍처로 빌드하면 문제 해결 (rosetta 실행)
   + => `env DOCKER_DEFAULT_PLATFORM=linux/amd64 docker compose build`
-    + 참고: [SCRAM authentication requires libpq version 10 or above #1898](https://github.com/MobSF/Mobile-Security-Framework-MobSF/issues/1898#issuecomment-1040555210)
+    + 참고: [How can I solve Postgresql SCRAM authentication problem?](https://stackoverflow.com/a/70238851)
 
 ```bash
 smp-api  |   File "/backend/.venv/lib/python3.9/site-packages/psycopg2/__init__.py", line 122, in connect
