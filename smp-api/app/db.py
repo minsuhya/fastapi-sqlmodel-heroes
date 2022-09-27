@@ -17,7 +17,7 @@ if os.path.exists(ENV_FILE):
 # https://fastapi.tiangolo.com/tutorial/sql-databases/#note
 # connect_args = {"check_same_thread": False}  # only for SQLite
 
-engine = create_engine(os.environ["CONN_URL"], echo=True)
+engine = create_engine(os.environ["CONN_URL"], echo=False)
 
 
 def create_db_and_tables():

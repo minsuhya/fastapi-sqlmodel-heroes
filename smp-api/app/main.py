@@ -11,6 +11,11 @@ from init import app
 from models import Hero, HeroCreate, HeroRead, HeroUpdate
 
 
+@app.get("/")
+def hello():
+    return {"msg": "Hello World"}
+
+
 @app.get("/heroes/", response_model=List[HeroRead])
 def read_heroes(
     *,

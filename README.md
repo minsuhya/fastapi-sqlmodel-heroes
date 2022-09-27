@@ -132,7 +132,32 @@ $ curl -X GET -H 'Accept: application/json' "http://localhost:58000/hero/5"
 }
 ```
 
-### 3) docker compose 실행
+### 3) pytest
+
+`tests/main_test.py` 에 작성
+
+```bash
+$ poetry run pytest tests --log-cli-level=DEBUG
+============================== test session starts ===============================
+platform darwin -- Python 3.9.13, pytest-7.1.3, pluggy-1.0.0
+rootdir: /Users/bgmin/Workspaces/python/sqlmodel/sqlmodel-pg-api/smp-api
+plugins: anyio-3.6.1
+collected 6 items
+
+tests/main_test.py::test_hello
+tests/main_test.py::test_read_items
+tests/main_test.py::test_read_item
+tests/main_test.py::test_create_item
+tests/main_test.py::test_update_item
+tests/main_test.py::test_delete_item
+
+tests/main_test.py ......                                                  [100%]
+
+=============================== 6 passed in 0.64s ================================
+```
+
+
+### 4) docker compose 실행
 
 ```bash
 # 도커 컴포즈에서 linux/amd64 이미지 생성
