@@ -1,5 +1,11 @@
 Dockerfile
+.venv
+.vscode
+.pytest_cache
 __pycache__
 **/*.pyc
 *.log
 .git
+
+# temporary files
+**/*.bak

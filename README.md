@@ -93,6 +93,13 @@ $ curl -X GET -H 'Accept: application/json' "http://localhost:58000/hero/5"
 {"detail":"Hero not found"}%
 ```
 
+#### GET `/heroes/last`
+
+```bash
+$ curl -X GET "http://localhost:58000/heroes/last"
+{"name":"Spider-Boy","secret_name":"Pedro Parqueador","age":21,"team_id":null,"id":4}%
+```
+
 #### GET `/heroes`
 
 ```json
@@ -130,6 +137,34 @@ $ curl -X GET -H 'Accept: application/json' "http://localhost:58000/hero/5"
   "age": 48,
   "id": 2
 }
+```
+
+#### POST `/teams`
+
+```bash
+$ curl -X POST "http://localhost:8000/teams/" -H "Content-Type: application/json" -d '''
+{"name": "뉴욕팀", "headquarters": "뉴욕시청", "heroes": []}
+'''
+{"name":"뉴욕팀","headquarters":"뉴욕시청","id":6}%
+
+$ curl -X POST "http://localhost:8000/teams/" -H "Content-Type: application/json" -d '''
+{"name": "뉴욕팀", "headquarters": "뉴욕시청", "heroes": [
+  {"name":"Spider-Boy","secret_name":"Pedro Parqueador","age":21,"id":4}
+]}
+'''
+{"name":"뉴욕팀","headquarters":"뉴욕시청","id":7}%
+```
+
+#### PATCH `/teams`
+
+```bash
+# update partial-data by ID=5
+$ curl -X PATCH "http://localhost:8000/teams/6" -H "Content-Type: application/json" -H 'Accept: application/json' -d '''
+{"name": "뉴욕팀 Super", "headquarters": "뉴욕시청 공원", "heroes": [
+  {"name":"Spider-Boy","secret_name":"Pedro Parqueador","age":21,"id":4}
+]}
+'''
+{"name":"뉴욕팀 Super","headquarters":"뉴욕시청 공원","id":6}%
 ```
 
 ### 3) pytest

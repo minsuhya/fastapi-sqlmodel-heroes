@@ -69,7 +69,7 @@ ENV PATH="${PATH}:$VENV_PATH/bin"
 # check python & poetry
 RUN python --version && poetry --version
 
-WORKDIR backend
+WORKDIR /backend
 
 # copy .env, toml and sources
 COPY --chown=fastapi $APP_TOML ./pyproject.toml
