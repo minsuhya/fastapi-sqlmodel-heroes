@@ -1,10 +1,11 @@
 import uvicorn
 
-from api import hero_router, team_router
+from api import hero_router, team_router, tutorial_router
 from core import app
 
 app.include_router(hero_router)
 app.include_router(team_router)
+app.include_router(tutorial_router)
 
 
 @app.get("/")

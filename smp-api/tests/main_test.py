@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 import os
 import sys
@@ -14,8 +15,8 @@ sys.path.append(os.path.join(ROOT_DIR, "app"))
 # this is to include backend dir in sys.path so that we can import from db,main.py
 
 from main import app
+from models import HeroRead
 
-# from models import Hero, HeroCreate, HeroRead, HeroUpdate
 logging.basicConfig(level=logging.INFO)
 
 client = TestClient(app)
@@ -27,6 +28,25 @@ def test_hello():
     result = response.json()
     assert result == {"msg": "Hello World"}
     logging.info(result)
+
+
+def test_hero():
+    response = client.get(
+        "/heroes/last", headers={"Content-Type": "application/json", "Accept": "application/json"}
+    )
+    assert response.status_code == 200
+    result = response.json()
+    assert "id" in result
+
+    assert isinstance(result, dict)
+    try:
+        hero = HeroRead(**result)
+        logging.info(hero)
+    except Exception as e:
+        logging.debug(e)
+        assert False
+
+    assert result == json.loads(hero.json())
 
 
 url = "http://localhost:8000/heroes/"
@@ -81,8 +101,8 @@ async def httpx_with_every_client():
     logging.info(f"ASYNC1-httpx) Send 100 requests, time consuming: {end - start}")
 
 
-def test_httpx_with_every_client():
-    asyncio.run(httpx_with_every_client())
+# def test_httpx_with_every_client():
+#     asyncio.run(httpx_with_every_client())
 
 
 ##################################################
@@ -104,8 +124,8 @@ async def httpx_with_one_client():
     logging.info(f"ASYNC2-httpx) Send 100 requests, time consuming: {end - start}")
 
 
-def test_httpx_with_one_client():
-    asyncio.run(httpx_with_one_client())
+# def test_httpx_with_one_client():
+#     asyncio.run(httpx_with_one_client())
 
 
 ##################################################
@@ -127,8 +147,8 @@ def httpx_with_sync():
     logging.info(f"SYNC3-httpx) Send 100 requests, time consuming: {end - start}")
 
 
-def test_httpx_with_sync():
-    httpx_with_sync()
+# def test_httpx_with_sync():
+#     httpx_with_sync()
 
 
 ##################################################
@@ -137,9 +157,11 @@ def test_httpx_with_sync():
 #
 
 
-def requests_with_sync(session):
+def requests_with_sync():
+    requests_session = requests.session()
+
     def make_request():
-        resp = session.get(url, headers=headers)
+        resp = requests_session.get(url, headers=headers)
         print(resp.status_code)
 
     start = time.time()
@@ -149,6 +171,5 @@ def requests_with_sync(session):
     logging.info(f"SYNC4-requests) Send 100 requests, time consuming: {end - start}")
 
 
-def test_requests_with_sync():
-    requests_session = requests.session()
-    requests_with_sync(requests_session)
+# def test_requests_with_sync():
+#     requests_with_sync(requests_session)

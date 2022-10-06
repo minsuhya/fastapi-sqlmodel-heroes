@@ -1,63 +1,47 @@
 from typing import List, Optional
 
-from sqlmodel import Field, Relationship, SQLModel
+from sqlmodel import Field, Relationship
+
+from models.hero import HeroBase
+from models.team import TeamBase
 
 #####################################################
-#   ImportError: most likely due to a circular import
+#  ImportError: most likely due to a circular import
+#  ==> 상호참조 모델은 한곳에서 정의해야 한다.
 #
-
-
-class HeroBase(SQLModel):
-    name: str = Field(index=True)
-    secret_name: str
-    age: Optional[int] = Field(default=None, index=True)
-
-    team_id: Optional[int] = Field(default=None, foreign_key="team.id")
 
 
 class Hero(HeroBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    # pydantic 은 Relationship 을 지원하지 않는다.
+    # ==> field 로 인식하지 않는다.
     team: Optional["Team"] = Relationship(back_populates="heroes")
-
-
-class HeroCreate(HeroBase):
-    pass
 
 
 class HeroRead(HeroBase):
     id: int
 
 
-class HeroUpdate(SQLModel):
-    name: Optional[str] = None
-    secret_name: Optional[str] = None
-    age: Optional[int] = None
-    team_id: Optional[int] = None
-
-
-################################################
-
-
-class TeamBase(SQLModel):
-    name: str = Field(index=True)
-    headquarters: str
-
-
 class Team(TeamBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-
+    # pydantic 은 Relationship 을 지원하지 않는다.
+    # ==> field 로 인식하지 않는다.
     heroes: List[Hero] = Relationship(back_populates="team")
-
-
-class TeamCreate(TeamBase):
-    pass
 
 
 class TeamRead(TeamBase):
     id: int  # override id to be required
 
 
-class TeamUpdate(SQLModel):
-    name: Optional[str] = None
-    headquarters: Optional[str] = None
-    heroes: List["Hero"] = Relationship(back_populates="team")
+################################################
+#  Models with Relationships
+#  https://sqlmodel.tiangolo.com/tutorial/fastapi/relationships/#models-with-relationships
+#
+
+
+class HeroReadWithTeam(HeroRead):
+    team: Optional[TeamRead] = None
+
+
+class TeamReadWithHeroes(TeamRead):
+    heroes: List[HeroRead] = []

@@ -1,6 +1,8 @@
+import json
 import logging
 import os
 import sys
+from typing import Any, List
 
 from fastapi.testclient import TestClient
 
@@ -9,11 +11,33 @@ sys.path.append(os.path.join(ROOT_DIR, "app"))
 # this is to include backend dir in sys.path so that we can import from db,main.py
 
 from main import app
+from models import HeroRead
 
-# from models import Hero, HeroCreate, HeroRead, HeroUpdate
 logging.basicConfig(level=logging.INFO)
 
 client = TestClient(app)
+
+
+def convert_result_to_hero(result) -> HeroRead:
+    assert isinstance(result, dict)
+    try:
+        hero = HeroRead(**result)
+        logging.info(hero)
+    except Exception as e:
+        logging.debug(e)
+        assert False
+    return hero
+
+
+def convert_result_to_heroes(result) -> List[HeroRead]:
+    assert isinstance(result, list)
+    try:
+        heroes = [HeroRead(**r) for r in result]
+        logging.info(heroes)
+    except Exception as e:
+        logging.debug(e)
+        assert False
+    return heroes
 
 
 def test_read_items():
@@ -21,9 +45,9 @@ def test_read_items():
         "/heroes", headers={"Content-Type": "application/json", "Accept": "application/json"}
     )
     assert response.status_code == 200
-    result = response.json()
+    result: List[Any] = response.json()
     assert result != []
-    logging.info(result)
+    convert_result_to_heroes(result)
 
 
 def test_read_item():
@@ -33,7 +57,7 @@ def test_read_item():
     assert response.status_code == 200
     result = response.json()
     assert result != {}
-    logging.info(result)
+    convert_result_to_hero(result)
 
 
 def test_create_item():
@@ -45,7 +69,7 @@ def test_create_item():
     assert response.status_code == 200
     result = response.json()
     assert result["secret_name"] is not None
-    logging.info(result)
+    convert_result_to_hero(result)
 
 
 def test_update_item():
@@ -57,23 +81,20 @@ def test_update_item():
     assert "id" in origin_result
     item_id = origin_result["id"]
 
-    origin_result["name"] += " Super"
-    origin_result["age"] = None
-    origin_result["team_id"] = 1
+    hero = convert_result_to_hero(origin_result)
+    hero.name += " Super"
+    hero.age = None
+    hero.team_id = 1
 
     response = client.patch(
         f"/heroes/{item_id}",
         headers={"Content-Type": "application/json", "Accept": "application/json"},
-        json={
-            "name": origin_result["name"],
-            "age": origin_result["age"],
-            "team_id": origin_result["team_id"],
-        },
+        json=hero.dict(exclude_unset=True),
     )
     assert response.status_code == 200
     updated_result = response.json()
-    assert updated_result == origin_result
-    logging.info(updated_result)
+    assert updated_result == json.loads(hero.json())
+    convert_result_to_hero(updated_result)
 
 
 def test_delete_item():

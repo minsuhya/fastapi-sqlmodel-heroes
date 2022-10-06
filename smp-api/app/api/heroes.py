@@ -2,7 +2,7 @@ from typing import List
 
 from core import get_session
 from fastapi import APIRouter, Depends, HTTPException, Query
-from models.joined import Hero, HeroCreate, HeroRead, HeroUpdate
+from models import Hero, HeroCreate, HeroRead, HeroReadWithTeam, HeroUpdate
 from sqlmodel import Session, desc, select
 
 router = APIRouter()
@@ -11,6 +11,14 @@ router = APIRouter()
 @router.get("/heroes/last", response_model=HeroRead)
 def get_last_hero(*, session: Session = Depends(get_session)):
     hero = session.exec(select(Hero).order_by(desc(Hero.id))).first()
+    if not hero:
+        raise HTTPException(status_code=404, detail="Hero not found")
+    return hero
+
+
+@router.get("/heroes/{hero_id}", response_model=HeroReadWithTeam)
+def read_hero(*, session: Session = Depends(get_session), hero_id: int):
+    hero = session.get(Hero, hero_id)
     if not hero:
         raise HTTPException(status_code=404, detail="Hero not found")
     return hero
