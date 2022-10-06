@@ -45,7 +45,7 @@ def test_read_groups():
         "/teams", headers={"Content-Type": "application/json", "Accept": "application/json"}
     )
     assert response.status_code == 200
-    result = response.json()
+    result = response.json()  # type: List[dict]
     assert result != []
     convert_result_to_teams(result)
 
@@ -55,7 +55,7 @@ def test_read_group():
         "/team/1", headers={"Content-Type": "application/json", "Accept": "application/json"}
     )
     assert response.status_code == 200
-    result = response.json()
+    result = response.json()  # type: dict
     assert result != {}
     convert_result_to_team(result)
 

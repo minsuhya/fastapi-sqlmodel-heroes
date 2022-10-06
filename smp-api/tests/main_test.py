@@ -35,7 +35,7 @@ def test_hero():
         "/heroes/last", headers={"Content-Type": "application/json", "Accept": "application/json"}
     )
     assert response.status_code == 200
-    result = response.json()
+    result = response.json()  # type: dict
     assert "id" in result
 
     assert isinstance(result, dict)
@@ -65,20 +65,20 @@ async def aiohttp_with_every_client():
     async def make_request():
         async with aiohttp.ClientSession() as client:
             async with client.get(url, headers=headers) as resp:
-                print(resp.status)
+                assert resp.status == 200
 
     start = time.time()
     # tasks = [asyncio.ensure_future(make_request()) for _ in range(100)]
     # loop = asyncio.get_event_loop()
     # loop.run_until_complete(asyncio.wait(tasks))
 
-    tasks = [asyncio.create_task(make_request()) for _ in range(100)]
+    tasks = [asyncio.create_task(make_request()) for _ in range(1000)]
     await asyncio.gather(*tasks)
     end = time.time()
     logging.info(f"ASYNC0-aiohttp) Send 100 requests, time consuming: {end - start}")
 
 
-def testaiohttp_with_every_client():
+def test_aiohttp_with_every_client():
     asyncio.run(aiohttp_with_every_client())
 
 

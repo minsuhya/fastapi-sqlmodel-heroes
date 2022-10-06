@@ -2,7 +2,7 @@ import json
 import logging
 import os
 import sys
-from typing import Any, List
+from typing import List
 
 from fastapi.testclient import TestClient
 
@@ -45,7 +45,7 @@ def test_read_items():
         "/heroes", headers={"Content-Type": "application/json", "Accept": "application/json"}
     )
     assert response.status_code == 200
-    result: List[Any] = response.json()
+    result = response.json()  # type: List[dict]
     assert result != []
     convert_result_to_heroes(result)
 
@@ -55,7 +55,7 @@ def test_read_item():
         "/hero/1", headers={"Content-Type": "application/json", "Accept": "application/json"}
     )
     assert response.status_code == 200
-    result = response.json()
+    result = response.json()  # type: dict
     assert result != {}
     convert_result_to_hero(result)
 

@@ -30,7 +30,7 @@ CONTAINER ID   IMAGE         COMMAND                  CREATED         STATUS    
 
 ### 2) 시행착오 기록
 
-#### ports 네트워크 매핑 확인
+#### (1) ports 네트워크 매핑 확인
 
 `0.0.0.0:5432->5432/tcp` 정보가 조회되어야 정상적으로 접근 가능
 
@@ -47,7 +47,7 @@ CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS   
 5243a86275da   postgres:14   "docker-entrypoint.s…"   57 seconds ago   Up 55 seconds   5432/tcp   pg14
 ```
 
-#### docker run 으로 정상실행 확인
+#### (2) docker run 으로 정상실행 확인
 
 postgresql 의 정상 작동은 docker run 으로 실행해 보는 것이 가장 정확하다.
 
@@ -55,3 +55,46 @@ postgresql 의 정상 작동은 docker run 으로 실행해 보는 것이 가장
   + `docker ps -a` 로 포트 매핑 확인
   + `psql` 에 의한 USER/PASSWORD 정상접속을 확인할 것!
 
+
+### 3) psql 으로 host 로부터 db 접속
+
+```bash
+$ psql -d company_db -U tonyne -h localhost -p 5432 -W
+Password:
+psql (14.5)
+Type "help" for help.
+
+company_db=# show time zone;
+  TimeZone
+------------
+ Asia/Seoul
+(1 row)
+
+company_db=# \l
+                           List of databases
+    Name    | Owner  | Encoding | Collate |  Ctype  | Access privileges
+------------+--------+----------+---------+---------+-------------------
+ company_db | tonyne | UTF8     | C.UTF-8 | C.UTF-8 |
+ notebooks  | tonyne | UTF8     | C.UTF-8 | C.UTF-8 |
+ postgres   | tonyne | UTF8     | C.UTF-8 | C.UTF-8 |
+ template0  | tonyne | UTF8     | C.UTF-8 | C.UTF-8 | =c/tonyne        +
+            |        |          |         |         | tonyne=CTc/tonyne
+ template1  | tonyne | UTF8     | C.UTF-8 | C.UTF-8 | =c/tonyne        +
+            |        |          |         |         | tonyne=CTc/tonyne
+(5 rows)
+
+company_db=# \dt
+       List of relations
+ Schema | Name | Type  | Owner
+--------+------+-------+--------
+ public | hero | table | tonyne
+ public | team | table | tonyne
+(2 rows)
+
+company_db=# \du
+Role name |                 Attributes                    | Member of
+----------+-----------------------------------------------+-----------
+tonyne    | Superuser, Create role, Create DB, ...        | {}
+
+company_db=# 
+```

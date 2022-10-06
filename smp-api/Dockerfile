@@ -76,6 +76,7 @@ COPY --chown=fastapi $APP_TOML ./pyproject.toml
 COPY --chown=fastapi $APP_ROOT ./$APP_ROOT
 # make virtualenv in project
 RUN poetry config virtualenvs.in-project true
+# install dependencies only
 RUN poetry install --no-root && poetry run which python
 
 # poetry run alembic upgrade head after depends_on DB
