@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from db import create_db_and_tables, engine
+from core.db import create_db_and_tables, engine
 
 app = FastAPI(title="FastAPI + SQLModel + PostgreSQL", version="0.1.0")
 

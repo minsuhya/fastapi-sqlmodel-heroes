@@ -36,14 +36,14 @@ company_db=# select * from hero;
 
 #### Frontend: web
 
-| ![Vue heroes screen](/assets/img/12-fastapi-sqlmodel-pg14-docs-crunch/png){: width="580"} |
+| ![Vue heroes screen](/assets/img/12-fastapi-sqlmodel-pg14-docs-crunch.png){: width="580"} |
 | :----: |
 | &lt;그림&gt; Vue `/heroes` 화면 |
 
 
 ### 2) API 샘플
 
-#### POST `/heroes`
+#### (1) create hero : POST `/heroes`
 
 ```bash
 # insert with HeroCreate
@@ -58,7 +58,7 @@ $ curl -X GET "http://localhost:58000/hero/5"
 {"name":"ABC Teacher","secret_name":"foo bar","age":35,"id":5}%
 ```
 
-#### PATCH `/heroes/{id}`
+#### (2) update hero{id} : PATCH `/heroes/{id}`
 
 ```bash
 # update whole-data by ID=5
@@ -80,7 +80,7 @@ $ curl -X GET -H 'Accept: application/json' "http://localhost:58000/hero/5"
 {"name":"ABC Teacher Teacher (Extra)","secret_name":"foo bar","age":55,"id":5}%
 ```
 
-#### DELETE `/heroes/{id}`
+#### (3) delete hero{id} : DELETE `/heroes/{id}`
 
 ```bash
 # delete by ID=5
@@ -93,48 +93,149 @@ $ curl -X GET -H 'Accept: application/json' "http://localhost:58000/hero/5"
 {"detail":"Hero not found"}%
 ```
 
-#### GET `/heroes`
+#### (4) select hero or heroes
 
-```json
-[
-  {
-    "name": "Deadpond",
-    "secret_name": "Dive Wilson",
-    "age": null,
-    "id": 1
-  },{
-    "name": "Rusty-Man",
-    "secret_name": "Tommy Sharp",
-    "age": 48,
-    "id": 2
-  },{
-    "name": "Dormammu",
-    "secret_name": "Unknown",
-    "age": null,
-    "id": 3
-  },{
-    "name": "Spider-Boy",
-    "secret_name": "Pedro Parqueador",
-    "age": 21,
-    "id": 4
-  }
-]
+- GET `/heroes/last`
+- GET `/heroes`
+- GET `/hero/2`
+
+```bash
+$ curl -X GET "http://localhost:58000/heroes/last"
+{"name":"Spider-Boy","secret_name":"Pedro Parqueador","age":21,"team_id":null,"id":4}%
 ```
 
-#### GET `/hero/2`
+- select with relations : GET `/heroes/1`
 
 ```json
 {
-  "name": "Rusty-Man",
-  "secret_name": "Tommy Sharp",
-  "age": 48,
-  "id": 2
+  "name": "Deadpond",
+  "secret_name": "Dive Wilson",
+  "age": null,
+  "team_id": 1,
+  "id": 1,
+  "team": {
+    "name": "서울팀",
+    "headquarters": "종로구",
+    "id": 1
+  }
 }
 ```
 
-### 3) pytest
+#### (5) create team : POST `/teams`
 
-`tests/main_test.py` 에 작성
+```bash
+$ curl -X POST "http://localhost:8000/teams/" -H "Content-Type: application/json" -d '''
+{"name": "뉴욕팀", "headquarters": "뉴욕시청", "heroes": []}
+'''
+{"name":"뉴욕팀","headquarters":"뉴욕시청","id":6}%
+
+$ curl -X POST "http://localhost:8000/teams/" -H "Content-Type: application/json" -d '''
+{"name": "뉴욕팀", "headquarters": "뉴욕시청", "heroes": [
+  {"name":"Spider-Boy","secret_name":"Pedro Parqueador","age":21,"id":4}
+]}
+'''
+{"name":"뉴욕팀","headquarters":"뉴욕시청","id":7}%
+```
+
+#### (6) update team{id} : PATCH `/teams/{id}`
+
+```bash
+# update partial-data by ID=5
+$ curl -X PATCH "http://localhost:8000/teams/6" -H "Content-Type: application/json" -H 'Accept: application/json' -d '''
+{"name": "뉴욕팀 Super", "headquarters": "뉴욕시청 공원", "heroes": [
+  {"name":"Spider-Boy","secret_name":"Pedro Parqueador","age":21,"id":4}
+]}
+'''
+{"name":"뉴욕팀 Super","headquarters":"뉴욕시청 공원","id":6}%
+```
+
+#### (3) delete team{id} : DELETE `/teams/{id}`
+
+```bash
+# delete by ID=5
+$ curl -X DELETE -H 'Accept: application/json' "http://localhost:58000/teams/5"
+{"ok":true}%
+
+
+# select by ID=5 => 404 Error
+$ curl -X GET -H 'Accept: application/json' "http://localhost:58000/teams/5"
+{"detail":"Team not found"}%
+```
+
+#### (4) select team or teams
+
+- GET `/teams/last`
+- GET `/teams`
+- GET `/team/2`
+
+```bash
+$ curl -X GET "http://localhost:58000/teams/last"
+{"name":"Spider-Boy","secret_name":"Pedro Parqueador","age":21,"team_id":null,"id":4}%
+```
+
+- select with relations : GET `/teams/1`
+
+```json
+{
+  "name": "서울팀",
+  "headquarters": "종로구",
+  "id": 1,
+  "heroes": [
+    {
+      "name": "Deadpond",
+      "secret_name": "Dive Wilson",
+      "age": null,
+      "team_id": 1,
+      "id": 1
+    },
+    {
+      "name": "Rusty-Man",
+      "secret_name": "Tommy Sharp",
+      "age": 48,
+      "team_id": 1,
+      "id": 2
+    }
+  ]
+}
+```
+
+### 3) tutorials
+
+#### (0) remove heroes and teams : GET `/tutorial/0`
+
+- delete `select(Hero).where(Hero.name.match("%Tutorial%"))`
+- delete `select(Team).where(Team.name.match("%Tutorial%"))`
+
+#### (1) create heroes and teams : GET `/tutorial/1`
+
+- create teams: ['Tutorial Preventers', 'Tutorial Z-Force']
+- create heroes: ['Tutorial Deadpond', 'Tutorial Rusty-Man', 'Tutorial Spider-Boy']
+  - 'Tutorial Deadpond'.team = 'Tutorial Z-Force'
+  - 'Tutorial Rusty-Man'.team = 'Tutorial Preventers'
+
+#### (2) select hero and team : GET `/tutorial/2`
+
+- select hero `select(Hero).where(Hero.name == "Tutorial Spider-Boy")`
+- select team `select(Team).where(Team.id == hero_spider_boy.team_id)`
+
+#### (3) update hero with team : GET `/tutorial/3`
+
+- update hero "Tutorial Spider-Boy"
+  - hero_spider_boy.team = team_preventers  (팀 배정)
+  
+#### (4) delete team and update heroes : GET `/tutorial/4`
+
+- delete team "Tutorial Preventers"
+  + updated hero with none team
+
+### 4) pytest
+
+#### (1) `tests/main_test.py`
+
+- test_hello : fastapi 작동 여부
+- test_hero : GET `/heroes/last` 작동 여부와 HeroRead 변환
+- test_aiohttp_with_every_client : 1000 번 GET `/heroes/` 호출
+  + resp.status == 200 검사
 
 ```bash
 $ poetry run pytest tests --log-cli-level=DEBUG
@@ -156,21 +257,48 @@ tests/main_test.py ......                                                  [100%
 =============================== 6 passed in 0.64s ================================
 ```
 
+#### (2) `tests/hero_test.py`
 
+- test_read_items, test_read_item : select 테스트
+- test_create_item : create 테스트
+- test_update_item : update 테스트
+- test_delete_item : delete 테스트
+
+#### (3) `tests/team_test.py`
+
+- test_read_groups, test_read_group : select 테스트
+- test_create_group : create 테스트
+- test_update_group : update 테스트
+- test_delete_group: delete 테스트
+
+  
 ### 4) docker compose 실행
 
 ```bash
-# 도커 컴포즈에서 linux/amd64 이미지 생성
+# 도커 컴포즈에서 linux/amd64 이미지 생성 (Mac M1)
 $ env DOCKER_DEFAULT_PLATFORM=linux/amd64 docker compose build
-
-
-$ docker compose run --rm db
-
+[+] Building 650.5s (20/21)
+ => [internal] load build definition from Dockerfile                 0.0s
+ => => transferring dockerfile: 32B                                  0.0s
+ => [internal] load .dockerignore                                    0.0s
+ => => transferring context: 34B                                     0.0s
+ => [internal] load metadata for docker.io/library/python:3.9-slim   3.1s
+...
 
 $ docker compose up -d
-
+[+] Running 2/2
+ ⠿ Container smp-db   Created                                        0.0s
+ ⠿ Container smp-api  Recreated                                      0.1s
+Attaching to smp-api, smp-db
+...
 
 $ docker compose down -v
+[+] Running 5/0
+ ⠿ Container smp-api                Removed                          0.0s
+ ⠿ Container smp-db                 Removed                          0.0s
+ ⠿ Volume smpapi_data               Removed                          0.0s
+ ⠿ Volume smpdb_data                Removed                          0.0s
+ ⠿ Network sqlmodel-pg-api_default  Rem...                           0.1s
 ```
 
 > 참고

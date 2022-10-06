@@ -3,13 +3,12 @@ import os
 import sqlalchemy as sa
 from dotenv import load_dotenv
 from loguru import logger
+from models import Hero, Team
 from sqlmodel import Session, SQLModel, create_engine
-
-from models import Hero
 
 # from sqlmodel import text, select
 
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ENV_FILE = os.path.join(ROOT_DIR, ".env")
 if os.path.exists(ENV_FILE):
     load_dotenv(ENV_FILE)
@@ -33,15 +32,28 @@ def insert_samples():
             logger.info("Samples already inserted: size={}", size)
             return
 
-        session.add_all(
-            instances=[
-                Hero(name="Deadpond", secret_name="Dive Wilson"),
-                Hero(name="Rusty-Man", secret_name="Tommy Sharp", age=48),
-                Hero(name="Dormammu", secret_name="Unknown"),
-                Hero(name="Spider-Boy", secret_name="Pedro Parqueador", age=21),
-            ]
-        )
+        team1 = Team(name="서울팀", headquarters="종로구")
+        team2 = Team(name="충남팀", headquarters="홍성군")
+        team3 = Team(name="경북팀", headquarters="울산군", heroes=[])
+        session.add_all(instances=[team1, team2, team3])
         session.commit()
+        session.refresh(team1)
+        session.refresh(team2)
+        session.refresh(team3)
+        logger.info([team1, team2, team3])
+
+        hero1 = Hero(name="Deadpond", secret_name="Dive Wilson", team_id=1)
+        hero2 = Hero(name="Rusty-Man", secret_name="Tommy Sharp", age=48, team_id=1)
+        hero3 = Hero(name="Dormammu", secret_name="Unknown", team_id=2)
+        hero4 = Hero(name="Spider-Boy", secret_name="Pedro Parqueador", age=21)
+        session.add_all(instances=[hero1, hero2, hero3, hero4])
+        session.commit()
+        session.refresh(hero1)
+        session.refresh(hero2)
+        session.refresh(hero3)
+        session.refresh(hero4)
+        logger.info([hero1, hero2, hero3, hero4])
+        logger.info([team1, team2, team3])
 
 
 def query_count(from_cls):
