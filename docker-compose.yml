@@ -4,6 +4,7 @@ services:
   db:
     image: postgres:14
     container_name: smp-db
+    restart: always
     env_file:
       - db.env
     ports:
@@ -27,6 +28,15 @@ services:
     volumes:
       - smpapi_data:/app
 
+  mongo:
+    image: mongo:6
+    container_name: smp-mongo
+    restart: always
+    ports:
+      - 27017:27017/tcp
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: tonyne
+      MONGO_INITDB_ROOT_PASSWORD: tonyne
 
 volumes:
   smpdb_data:
