@@ -5,7 +5,12 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from models import Team, TeamCreate, TeamRead, TeamReadWithHeroes, TeamUpdate
 from sqlmodel import Session, desc, select
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/pgdb",
+    tags=["teams"],
+    dependencies=[Depends(get_session)],
+    responses={404: {"description": "API Not found"}},
+)
 
 
 # select the last team
