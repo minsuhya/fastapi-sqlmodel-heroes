@@ -1,6 +1,6 @@
+from models.book import Book, BookUpdate, Person
 from models.hero import HeroCreate, HeroUpdate
 from models.joined import Hero, HeroRead, HeroReadWithTeam, Team, TeamRead, TeamReadWithHeroes
-from models.student import StudentModel, UpdateStudentModel
 from models.team import TeamCreate, TeamUpdate
 
 __all__ = [
@@ -16,6 +16,7 @@ __all__ = [
     HeroReadWithTeam,
     TeamReadWithHeroes,
     # mongodb
-    StudentModel,
-    UpdateStudentModel,
+    Person,
+    Book,
+    BookUpdate,
 ]

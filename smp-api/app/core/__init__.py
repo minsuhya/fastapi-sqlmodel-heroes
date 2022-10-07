@@ -1,5 +1,5 @@
 from core.app import app
-from core.db import get_session
-from core.mongo import get_mongodb
+from core.mgdb import get_mongodb
+from core.pgdb import get_session
 
 __all__ = [app, get_session, get_mongodb]
