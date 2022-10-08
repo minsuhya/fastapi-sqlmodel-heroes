@@ -359,7 +359,7 @@ git checkout -b db-mongo
 git push --set-upstream origin db-mongo
 
 # main 브랜치로 변경 
-
+git checkout main
 
 # 변경사항 로그 조회
 git log --graph --decorate --oneline
@@ -367,4 +367,9 @@ git log --graph --decorate --oneline
 # 변경사항 파일 조회
 git status -u
 
+# 파일 변경사항 (이전 캐시와 비교)
+git diff --cached ../README.md
+
+# 파일 변경사항 취소
+git restore ../README.md
 ```
