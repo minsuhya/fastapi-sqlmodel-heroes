@@ -367,9 +367,21 @@ git log --graph --decorate --oneline
 # 변경사항 파일 조회
 git status -u
 
-# 파일 변경사항 (이전 캐시와 비교)
-git diff --cached ../README.md
+# 파일 변경사항 조회 (최신 HEAD와 비교)
+git diff ../README.md
+
+# staged 파일 변경사항 조회 (git add 된)
+git diff --staged ../README.md
 
 # 파일 변경사항 취소
 git restore ../README.md
+
+# 변경 스테이징
+git add --all
+
+# branch 반영에 대한 Pull request 처리 후, main 에서 
+# tag 생성 및 반영 (=> release 생성)
+#   - 또는 모든 tags 반영 : git push origin --tags
+git tag -a v0.0.3 -m "add mongoDB and APIs with csv upload"
+git push origin v0.0.3
 ```
