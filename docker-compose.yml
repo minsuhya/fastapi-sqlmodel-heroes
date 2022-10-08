@@ -12,22 +12,6 @@ services:
     volumes:
       - smpdb_data:/var/lib/postgresql/data
 
-  api:
-    image: py39-slim
-    container_name: smp-api
-    build: ./smp-api
-    command: poetry run python app/main.py
-    env_file:
-      - api.env
-    depends_on:
-      - db
-    links:
-      - db
-    ports:
-      - 58000:8000
-    volumes:
-      - smpapi_data:/app
-
   mongo:
     image: mongo:6
     container_name: smp-mongo
@@ -37,9 +21,31 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: tonyne
       MONGO_INITDB_ROOT_PASSWORD: tonyne
+    volumes:
+      - smpmg_data:/data/db
+
+  api:
+    image: py39-slim
+    container_name: smp-api
+    build: ./smp-api
+    command: poetry run python app/main.py
+    env_file:
+      - api.env
+    depends_on:
+      - db
+      - mongo
+    links:
+      - db
+      - mongo
+    ports:
+      - 58000:8000
+    volumes:
+      - smpapi_data:/app
 
 volumes:
   smpdb_data:
     name: smpdb_data
+  smpmg_data:
+    name: smpmg_data
   smpapi_data:
     name: smpapi_data
