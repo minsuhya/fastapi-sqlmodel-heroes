@@ -23,6 +23,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: tonyne
     volumes:
       - smpmg_data:/data/db
+      - smpmg_cfg:/data/configdb
 
   api:
     image: py39-slim
@@ -47,5 +48,7 @@ volumes:
     name: smpdb_data
   smpmg_data:
     name: smpmg_data
+  smpmg_cfg:
+    name: smpmg_cfg
   smpapi_data:
     name: smpapi_data

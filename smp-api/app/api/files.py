@@ -14,11 +14,6 @@ from models import Person
 from pymongo.collection import Collection
 from pymongo.database import Database
 
-# from fastapi import APIRouter, Body, Depends, File, UploadFile, status
-# from fastapi.encoders import jsonable_encoder
-# from fastapi.responses import JSONResponse
-# from models import StudentModel
-
 router = APIRouter(
     prefix="/files",
     tags=["files"],

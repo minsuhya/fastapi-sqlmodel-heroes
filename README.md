@@ -271,8 +271,43 @@ tests/main_test.py ......                                                  [100%
 - test_update_group : update 테스트
 - test_delete_group: delete 테스트
 
+
+### 5) mongoDB 관련 API
   
-### 4) docker compose 실행
+#### (1) `/files` : CSV 파일 업로드 및 JSON insert
+
+```bash
+$ curl -F 'file=@../assets/data/test.csv' -X POST "http://localhost:58000/files/upload"
+[{"name":"Alice","age":"20","height":"62","weight":"120.6","_id":"1"},{"name":"Freddie","age":"21","height":"74","weight":"190.6","_id":"2"},{"name":"Bob","age":"17","height":"68","weight":"120.0","_id":"3"}]%
+
+$ curl -X GET "http://localhost:8000/files/test"
+[{"_id":"1","name":"Alice","age":20,"height":62,"weight":120.6},{"_id":"2","name":"Freddie","age":21,"height":74,"weight":190.6},{"_id":"3","name":"Bob","age":17,"height":68,"weight":120.0}]%
+```
+
+#### (2) `/books` : Book 모델 insert
+
+```bash
+$ curl -X POST "http://localhost:8000/books/" -H "Content-Type: application/json" -d '''{ "_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
+  "title": "Don Quixote",
+  "author": "Miguel de Cervantes",
+  "synopsis": "..."
+}
+'''
+{"_id":"066de609-b04a-4b30-b46c-32537c7f1f6e","title":"Don Quixote","author":"Miguel de Cervantes","synopsis":"..."}%
+
+$ curl -X PUT "http://localhost:8000/books/066de609-b04a-4b30-b46c-32537c7f1f6e" -H "Content-Type: application/json" -d '''{
+  "title": "Don Quixote",
+  "author": "Miguel de Cervantes",
+  "synopsis": "Don Quixote is a Spanish novel by Miguel de Cervantes..."
+}
+'''
+{"_id":"066de609-b04a-4b30-b46c-32537c7f1f6e","title":"Don Quixote","author":"Miguel de Cervantes","synopsis":"Don Quixote is a Spanish novel by Miguel de Cervantes..."}%
+
+$ curl -X GET "http://localhost:8000/books/"
+[{"_id":"066de609-b04a-4b30-b46c-32537c7f1f6e","title":"Don Quixote","author":"Miguel de Cervantes","synopsis":"Don Quixote is a Spanish novel by Miguel de Cervantes..."}]%
+```
+
+## 4. docker compose 실행
 
 ```bash
 # 도커 컴포즈에서 linux/amd64 이미지 생성 (Mac M1)
@@ -301,7 +336,7 @@ $ docker compose down -v
  ⠿ Network sqlmodel-pg-api_default  Rem...                           0.1s
 ```
 
-> 참고
+> 참고: git
 
 ```
 # 신규 리포지토리에 연결시
@@ -316,4 +351,20 @@ git push -u origin main
 git remote add origin https://github.com/maxmin93/fastapi-sqlmodel-heroes.git
 git branch -M main
 git push -u origin main
+
+# 새로운 브랜치 생성/변경
+git checkout -b db-mongo
+
+# 새로운 브랜치로 push (최초)
+git push --set-upstream origin db-mongo
+
+# main 브랜치로 변경 
+
+
+# 변경사항 로그 조회
+git log --graph --decorate --oneline
+
+# 변경사항 파일 조회
+git status -u
+
 ```
