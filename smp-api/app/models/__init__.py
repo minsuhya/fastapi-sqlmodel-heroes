@@ -1,8 +1,10 @@
-from .hero import HeroCreate, HeroUpdate
-from .joined import Hero, HeroRead, HeroReadWithTeam, Team, TeamRead, TeamReadWithHeroes
-from .team import TeamCreate, TeamUpdate
+from models.book import Book, BookUpdate, Person
+from models.hero import HeroCreate, HeroUpdate
+from models.joined import Hero, HeroRead, HeroReadWithTeam, Team, TeamRead, TeamReadWithHeroes
+from models.team import TeamCreate, TeamUpdate
 
 __all__ = [
+    # postgres
     Hero,
     HeroRead,
     Team,
@@ -13,4 +15,8 @@ __all__ = [
     TeamUpdate,
     HeroReadWithTeam,
     TeamReadWithHeroes,
+    # mongodb
+    Person,
+    Book,
+    BookUpdate,
 ]

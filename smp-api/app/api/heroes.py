@@ -5,7 +5,12 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from models import Hero, HeroCreate, HeroRead, HeroReadWithTeam, HeroUpdate
 from sqlmodel import Session, desc, select
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/pgdb",
+    tags=["heroes"],
+    dependencies=[Depends(get_session)],
+    responses={404: {"description": "API Not found"}},
+)
 
 
 @router.get("/heroes/last", response_model=HeroRead)

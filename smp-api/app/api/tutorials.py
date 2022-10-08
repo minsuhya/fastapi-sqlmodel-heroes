@@ -4,7 +4,12 @@ from loguru import logger
 from models import Hero, Team
 from sqlmodel import Session, select
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/pgdb",
+    tags=["tutorials"],
+    dependencies=[Depends(get_session)],
+    responses={404: {"description": "API Not found"}},
+)
 
 
 @router.get("/tutorial/0")
