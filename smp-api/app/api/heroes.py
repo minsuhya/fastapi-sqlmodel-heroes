@@ -9,7 +9,9 @@ router = APIRouter(
     prefix="/pgdb",
     tags=["heroes"],
     dependencies=[Depends(get_session)],
-    responses={404: {"description": "API Not found"}},
+    responses={404: {
+        "description": "API Not found"
+    }},
 )
 
 
@@ -30,12 +32,10 @@ def read_hero(*, session: Session = Depends(get_session), hero_id: int):
 
 
 @router.get("/heroes/", response_model=List[HeroRead])
-def read_heroes(
-    *,
-    session: Session = Depends(get_session),
-    offset: int = 0,
-    limit: int = Query(default=100, lte=100)
-):
+def read_heroes(*,
+                session: Session = Depends(get_session),
+                offset: int = 0,
+                limit: int = Query(default=100, lte=100)):
     heroes = session.exec(select(Hero).offset(offset).limit(limit)).all()
     return heroes
 
@@ -50,7 +50,10 @@ def create_hero(*, session: Session = Depends(get_session), hero: HeroCreate):
 
 
 @router.patch("/heroes/{hero_id}", response_model=HeroRead)
-def update_hero(hero_id: int, *, session: Session = Depends(get_session), hero: HeroUpdate):
+def update_hero(hero_id: int,
+                *,
+                session: Session = Depends(get_session),
+                hero: HeroUpdate):
     db_hero = session.get(Hero, hero_id)
     if not db_hero:
         raise HTTPException(status_code=404, detail="Hero not found")

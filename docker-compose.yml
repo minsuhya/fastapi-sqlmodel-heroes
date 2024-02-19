@@ -4,6 +4,7 @@ services:
   # mariadb
   db:
     image: mariadb:10
+    container_name: smp-mysql
     restart: unless-stopped
     ports:
       - 3307:3306
@@ -16,7 +17,7 @@ services:
   # postgresql
   # db:
   #   image: postgres:14
-  #   container_name: smp-db
+  #   container_name: smp-pgsql
   #   restart: always
   #   env_file:
   #     - db.pg.env
