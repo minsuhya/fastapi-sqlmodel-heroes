@@ -18,6 +18,8 @@ psycopg2-binary = "^2.9.3"
 pymongo = "^4.2.0"
 python-multipart = "^0.0.5"
 uvicorn = "^0.18.3"
+# mysqlclient = "^2.2.4"
+pymysql = "^1.1.0"
 
 
 [tool.poetry.group.tests.dependencies]

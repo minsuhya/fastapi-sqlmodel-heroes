@@ -7,6 +7,7 @@ RUN apt-get update && apt-get upgrade -y
 
 # install utils: localedef, curl, sudo, ping, vim, git, libpq5
 RUN apt-get install -y locales curl sudo iputils-ping vim git
+    # python3-dev default-libmysqlclient-dev build-essential pkg-config # install for mysqlclient
 
 # default env.
 ENV TZ Asia/Seoul
