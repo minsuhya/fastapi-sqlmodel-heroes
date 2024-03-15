@@ -7,7 +7,8 @@ from pymongo.database import Database
 from pymongo.errors import ConnectionFailure
 
 # MongoDB attributes
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT_DIR = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ENV_FILE = os.path.join(ROOT_DIR, ".env")
 if os.path.exists(ENV_FILE):
     load_dotenv(ENV_FILE)

@@ -8,7 +8,8 @@ from sqlmodel import Session, SQLModel, create_engine
 
 # from sqlmodel import text, select
 
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT_DIR = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ENV_FILE = os.path.join(ROOT_DIR, ".env")
 if os.path.exists(ENV_FILE):
     load_dotenv(ENV_FILE)
@@ -43,7 +44,10 @@ def insert_samples():
         logger.info([team1, team2, team3])
 
         hero1 = Hero(name="Deadpond", secret_name="Dive Wilson", team_id=1)
-        hero2 = Hero(name="Rusty-Man", secret_name="Tommy Sharp", age=48, team_id=1)
+        hero2 = Hero(name="Rusty-Man",
+                     secret_name="Tommy Sharp",
+                     age=48,
+                     team_id=1)
         hero3 = Hero(name="Dormammu", secret_name="Unknown", team_id=2)
         hero4 = Hero(name="Spider-Boy", secret_name="Pedro Parqueador", age=21)
         session.add_all(instances=[hero1, hero2, hero3, hero4])
@@ -62,7 +66,8 @@ def query_count(from_cls):
     Usage:
         session.execute( `query_count(products)` ).scalar_one()
     """
-    return Session(engine).query(sa.func.count("*").label("cnt")).select_from(from_cls)
+    return Session(engine).query(
+        sa.func.count("*").label("cnt")).select_from(from_cls)
 
 
 def get_session():
